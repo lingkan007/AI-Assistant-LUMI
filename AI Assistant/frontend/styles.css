@@ -1,0 +1,303 @@
+:root {
+  --bg-1: #070b17;
+  --bg-2: #11213b;
+  --panel: rgba(15, 25, 41, 0.9);
+  --cyan: #74f5ff;
+  --cyan-soft: rgba(116, 245, 255, 0.45);
+  --pink: #ff7ce3;
+  --lavender: #c9b7ff;
+  --gold: #ffd36a;
+  --text: #edf6ff;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, var(--bg-2), var(--bg-1) 58%);
+  color: var(--text);
+}
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.app-shell {
+  position: relative;
+  width: min(680px, 92vw);
+  min-height: 600px;
+  border-radius: 28px;
+  background: rgba(11, 20, 33, 0.78);
+  border: 1px solid rgba(116, 245, 255, 0.22);
+  box-shadow: 0 24px 80px rgba(10, 17, 30, 0.6);
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hud {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(116, 245, 255, 0.18);
+  border: 1px solid rgba(116, 245, 255, 0.55);
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.status-label {
+  color: rgba(237, 246, 255, 0.7);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.character-scene {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  display: grid;
+  place-items: center;
+}
+
+.character {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  display: grid;
+  place-items: center;
+  animation: float 4s ease-in-out infinite;
+}
+
+.halo {
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(116, 245, 255, 0.5), rgba(116, 245, 255, 0.12) 44%, transparent 72%);
+  filter: blur(12px);
+  opacity: 0.85;
+}
+
+.body {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(180deg, #6c7ef5, #4a59b8 70%, #10172d 100%);
+  border-radius: 38% 38% 42% 42% / 43% 43% 57% 57%;
+  box-shadow: inset 0 -14px 14px rgba(0, 0, 0, 0.15), 0 18px 25px rgba(21, 31, 58, 0.45);
+  z-index: 2;
+}
+
+.head {
+  position: absolute;
+  left: 50%;
+  top: -88px;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 112px;
+  border-radius: 46% 46% 42% 42% / 52% 52% 48% 48%;
+  background: linear-gradient(180deg, #edf8ff, #dce8ff 60%, #b8d1ff 100%);
+  box-shadow: inset 0 -12px 14px rgba(54, 78, 133, 0.2);
+}
+
+.eye {
+  position: absolute;
+  top: 42px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #111827;
+  box-shadow: 0 0 0 6px rgba(116, 245, 255, 0.18);
+}
+
+.eye-left { left: 38px; }
+.eye-right { right: 38px; }
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff8ec6, #ff5f9d);
+  transition: width 0.14s ease, height 0.14s ease, transform 0.14s ease;
+}
+
+.wing {
+  position: absolute;
+  top: 42px;
+  width: 120px;
+  height: 90px;
+  background: linear-gradient(180deg, rgba(124, 116, 255, 0.7), rgba(124, 116, 255, 0.15));
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+  opacity: 0.7;
+}
+
+.wing-left {
+  left: 8px;
+  transform: rotate(-18deg);
+}
+
+.wing-right {
+  right: 8px;
+  transform: scaleX(-1) rotate(-18deg);
+}
+
+.halo, .wing, .body, .head, .mouth, .companion-bot {
+  transition: all 0.3s ease;
+}
+
+.wave {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(116, 245, 255, 0.45);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.65);
+}
+
+.wave-1 { animation: pulse 2.6s ease-out infinite; }
+.wave-2 { animation: pulse 2.6s ease-out 0.6s infinite; }
+.wave-3 { animation: pulse 2.6s ease-out 1.2s infinite; }
+
+.companion-bot {
+  position: absolute;
+  right: 72px;
+  bottom: 80px;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(44, 52, 72, 0.9), rgba(17, 20, 33, 0.9));
+  border: 1px solid rgba(115, 214, 255, 0.45);
+  box-shadow: 0 0 28px rgba(116, 245, 255, 0.22);
+  animation: hover 3s ease-in-out infinite;
+}
+
+.bot-visor {
+  position: absolute;
+  inset: 10px 8px 18px;
+  border-radius: 10px;
+  background: rgba(116, 245, 255, 0.15);
+}
+
+.bot-eye {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px rgba(116, 245, 255, 0.85);
+}
+
+button {
+  margin-top: 12px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--pink), var(--cyan));
+  color: #04101f;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(111, 146, 255, 0.35);
+}
+
+.connection-message {
+  min-height: 1.4em;
+  width: 90%;
+  margin: 0;
+  color: rgba(237, 246, 255, 0.72);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.connection-message[data-error="true"] {
+  color: #ffb7c8;
+}
+
+body[data-state="LISTENING"] .wave {
+  opacity: 1;
+}
+
+body[data-state="THINKING"] .character {
+  transform: rotate(-5deg) scale(1.02);
+}
+
+body[data-state="THINKING"] .companion-bot .bot-eye {
+  animation: blink 0.6s ease-in-out infinite alternate;
+}
+
+body[data-state="TALKING"] .mouth {
+  width: 76px;
+  height: 28px;
+}
+
+body[data-state="IDLE"] .wing {
+  opacity: 0.6;
+}
+
+body[data-state="IDLE"] .halo {
+  animation: glow 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-4px); }
+  50% { transform: translateY(10px); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0; transform: scale(0.6); }
+  30% { opacity: 0.8; }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes glow {
+  from { opacity: 0.7; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes hover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes blink {
+  from { transform: translate(-50%, -50%) scaleY(1); }
+  to { transform: translate(-50%, -50%) scaleY(0.2); }
+}

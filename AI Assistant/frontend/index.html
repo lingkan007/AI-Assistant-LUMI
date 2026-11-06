@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080b17" />
+    <title>Lumi | Live Voice Companion</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, "Segoe UI", sans-serif;
+        background: #080b17;
+        color: #eef4ff;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        --cyan: #76efff;
+        --pink: #ee89ff;
+        --muted: #9daac5;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-width: 320px;
+        min-height: 100svh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow-x: hidden;
+        background:
+          radial-gradient(ellipse at 50% 42%, rgba(52, 83, 147, .24), transparent 42%),
+          radial-gradient(ellipse at 50% 100%, rgba(46, 26, 98, .28), transparent 52%),
+          #080b17;
+      }
+
+      .app {
+        position: relative;
+        width: min(100%, 760px);
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: clamp(24px, 5vh, 48px) 24px 32px;
+        isolation: isolate;
+      }
+
+      .topline {
+        width: min(100%, 620px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        color: #f5f7ff;
+        font-size: .82rem;
+        font-weight: 700;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+      }
+
+      .state {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--cyan);
+        font-size: .72rem;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .state::before {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 12px currentColor;
+        content: "";
+      }
+
+      .stage {
+        position: relative;
+        width: min(100%, 600px);
+        flex: 1;
+        min-height: 360px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+
+      .glow {
+        position: absolute;
+        width: min(78vw, 430px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, rgba(89, 217, 255, .24), rgba(122, 76, 222, .16) 38%, transparent 70%);
+        filter: blur(18px);
+        animation: breathe 4s ease-in-out infinite alternate;
+      }
+
+      .character {
+        position: relative;
+        z-index: 1;
+        width: min(82vw, 430px);
+        height: min(68svh, 590px);
+        min-height: 300px;
+        object-fit: contain;
+        filter: drop-shadow(0 14px 36px rgba(89, 217, 255, .17));
+        animation: float 4.5s ease-in-out infinite;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .bottom {
+        width: min(100%, 560px);
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+      }
+
+      .transcript {
+        width: 100%;
+        min-height: 52px;
+        margin: 0;
+        color: #c9d4e9;
+        font-size: .95rem;
+        line-height: 1.55;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      .wake {
+        min-width: 190px;
+        padding: 14px 26px;
+        border: 1px solid rgba(118, 239, 255, .58);
+        border-radius: 999px;
+        background: linear-gradient(110deg, #a76bff, #4bcde8);
+        box-shadow: 0 0 28px rgba(82, 205, 235, .22);
+        color: #07101e;
+        cursor: pointer;
+        font: inherit;
+        font-size: .9rem;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+
+      .wake:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 0 38px rgba(82, 205, 235, .36);
+      }
+
+      .wake:focus-visible {
+        outline: 3px solid #fff;
+        outline-offset: 4px;
+      }
+
+      .wake:disabled {
+        cursor: wait;
+        opacity: .7;
+      }
+
+      .hint {
+        margin: 0;
+        color: var(--muted);
+        font-size: .73rem;
+        text-align: center;
+      }
+
+      [data-state="THINKING"] .state { color: var(--pink); }
+      [data-state="TALKING"] .state { color: #a68aff; }
+      [data-state="LISTENING"] .state { color: var(--cyan); }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(-5px); }
+        50% { transform: translateY(9px); }
+      }
+
+      @keyframes breathe {
+        from { opacity: .62; transform: scale(.92); }
+        to { opacity: 1; transform: scale(1.08); }
+      }
+
+      @media (max-height: 650px) {
+        .stage { min-height: 280px; }
+        .character { height: min(60svh, 440px); min-height: 260px; }
+        .app { gap: 10px; padding-top: 18px; padding-bottom: 18px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body data-state="IDLE">
+    <main class="app">
+      <header class="topline">
+        <span class="brand">Lumi / Voice companion</span>
+        <span id="state" class="state" aria-live="polite">Idle</span>
+      </header>
+
+      <section class="stage" aria-label="Lumi character">
+        <div class="glow" aria-hidden="true"></div>
+        <img
+          id="character"
+          class="character"
+          src="/assets/lumi_idle.png"
+          alt="Lumi, a cyber-fairy assistant"
+        />
+      </section>
+
+      <footer class="bottom">
+        <p id="transcript" class="transcript" aria-live="polite">
+          Press “Wake up Lumi” to start a voice conversation.
+        </p>
+        <button id="wake" class="wake" type="button">Wake up Lumi</button>
+        <p class="hint">Microphone access is used only while Lumi is awake.</p>
+      </footer>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
